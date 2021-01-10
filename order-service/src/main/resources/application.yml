@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres&currentSchema=order_service
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
