@@ -40,7 +40,7 @@ class FifoDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
                     val headOutboxMessage = deleteMessage()
 
                     if (headOutboxMessage == null) {
-                        logger.info { "No outbox message to consume; Returning..." }
+                        logger.info { "No outbox message to consume; Returning" }
                         status.setRollbackOnly()
                         return
                     }
@@ -52,7 +52,7 @@ class FifoDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
 
                     eventConsumer(event)
                 } catch (ex: Exception) {
-                    logger.error { "$ex; Rolling back message" }
+                    logger.error { "$ex; Rolling back deleted message" }
                     status.setRollbackOnly()
                 }
             }

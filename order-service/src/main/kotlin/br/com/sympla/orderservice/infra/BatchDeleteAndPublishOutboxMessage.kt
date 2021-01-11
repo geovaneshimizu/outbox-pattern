@@ -42,12 +42,12 @@ class BatchDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
                     val outboxMessages = deleteMessages(batchSize)
 
                     if (outboxMessages.isEmpty()) {
-                        logger.info { "No outbox message to consume; Returning..." }
+                        logger.info { "No outbox message to consume; Returning" }
                         status.setRollbackOnly()
                         return
                     }
 
-                    logger.info { "Deleted ${outboxMessages.size} outboxMessages" }
+                    logger.info { "Deleted ${outboxMessages.size} outbox messages" }
 
                     outboxMessages.forEach {
                         val event = extractEvent(it)
@@ -56,7 +56,7 @@ class BatchDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
                         eventConsumer(event)
                     }
                 } catch (ex: Exception) {
-                    logger.error { "$ex; Rolling back message" }
+                    logger.error { "$ex; Rolling back deleted messages" }
                     status.setRollbackOnly()
                 }
             }

@@ -13,7 +13,10 @@ class JdbcPollingOutboxProcessor(private val consumeStrategy: JdbcConsumeOutboxS
         private val logger = KotlinLogging.logger { }
     }
 
-    @Scheduled(fixedRate = 5_000L, initialDelay = 5_000L)
+    @Scheduled(
+            fixedRateString = "\${order-service.infra.polling-outbox-processor.fixed-rate-in-milli}",
+            initialDelayString = "\${order-service.infra.polling-outbox-processor.initial-delay-in-milli}"
+    )
     @Async
     override fun consumeOutbox() {
         logger.info { "Polling outbox message" }

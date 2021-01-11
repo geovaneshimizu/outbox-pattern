@@ -29,7 +29,7 @@ class JdbcConsumeOutboxStrategyConfig {
                                            transactionManager: PlatformTransactionManager,
                                            jsonbMapper: JsonbMapper,
                                            eventPublisher: ApplicationEventPublisher,
-                                           @Value("\${order-service.infra.delete-and-publish-outbox-message-batch-size}")
+                                           @Value("\${order-service.infra.delete-and-publish-outbox-message.batch-size}")
                                            batchSize: Int): JdbcConsumeOutboxStrategy {
         return BatchDeleteAndPublishOutboxMessage(
                 jdbcTemplate = jdbcTemplate,
