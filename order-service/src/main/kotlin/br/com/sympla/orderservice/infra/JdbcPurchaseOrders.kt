@@ -27,7 +27,7 @@ class JdbcPurchaseOrders(private val jdbcTemplate: JdbcTemplate,
                         InsertPurchaseOrder(this.jdbcTemplate, values)()
                                 .also { logger.info { "Inserted $it" } }
 
-                values.events()
+                values.associatedEvents()
                         .map { it(purchaseOrder) }
                         .map { it.publishEventValues() }
                         .forEach {

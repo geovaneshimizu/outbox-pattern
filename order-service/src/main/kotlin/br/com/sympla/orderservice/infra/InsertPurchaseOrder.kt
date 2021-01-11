@@ -10,9 +10,9 @@ class InsertPurchaseOrder(private val jdbcTemplate: JdbcTemplate,
 
     companion object {
         private val insertScript: String = """
-            INSERT INTO order_service.purchase_order(public_id, created_at, user_email, event_id, sector_id, seat_id)
-              VALUES (uuid_generate_v4(), now(), ?, ?, ?, ?)
-              RETURNING id, public_id, created_at, user_email, event_id, sector_id, seat_id
+            INSERT INTO order_service.purchase_order(user_email, event_id, sector_id, seat_id)
+              VALUES (?, ?, ?, ?)
+              RETURNING id, external_id, created_at, user_email, event_id, sector_id, seat_id
         """.trimIndent()
     }
 
@@ -26,7 +26,7 @@ class InsertPurchaseOrder(private val jdbcTemplate: JdbcTemplate,
         { resultSet, _ ->
             PurchaseOrder(
                     id = resultSet.getLong("id"),
-                    publicId = resultSet.getUUID("public_id"),
+                    externalId = resultSet.getUUID("external_id"),
                     createdAt = resultSet.getInstant("created_at"),
                     userEmail = resultSet.getString("user_email"),
                     eventId = resultSet.getLong("event_id"),

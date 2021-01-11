@@ -4,7 +4,7 @@ import br.com.sympla.orderservice.domain.PurchaseOrder
 import java.time.Instant
 import java.util.*
 
-data class PlaceOrderResponse(val publicId: UUID,
+data class PlaceOrderResponse(val _id: UUID,
                               val createdAt: Instant,
                               val userEmail: String,
                               val eventId: Long,
@@ -15,7 +15,7 @@ data class PlaceOrderResponse(val publicId: UUID,
 
         operator fun invoke(purchaseOrder: PurchaseOrder): PlaceOrderResponse {
             return PlaceOrderResponse(
-                    purchaseOrder.publicId,
+                    purchaseOrder.externalId,
                     purchaseOrder.createdAt,
                     purchaseOrder.userEmail,
                     purchaseOrder.eventId,

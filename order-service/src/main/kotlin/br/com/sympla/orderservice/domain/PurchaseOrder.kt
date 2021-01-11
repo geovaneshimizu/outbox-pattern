@@ -4,7 +4,7 @@ import java.time.Instant
 import java.util.*
 
 data class PurchaseOrder(private val id: Long,
-                         val publicId: UUID,
+                         val externalId: UUID,
                          val createdAt: Instant,
                          val userEmail: String,
                          val eventId: Long,

@@ -22,13 +22,13 @@ class PlaceOrderEndpoint(private val purchaseOrders: PurchaseOrders) {
     fun post(@RequestBody placeOrderRequest: PlaceOrderRequest): ResponseEntity<PlaceOrderResponse> {
         logger.info { "Received $placeOrderRequest" }
 
-        val purchaseOrder = this.purchaseOrders.placeOrder(placeOrderRequest.asCommand())
+        val purchaseOrder = this.purchaseOrders.placeOrder(placeOrderRequest.toPlaceOrderValues())
 
         return purchaseOrder?.let {
             ResponseEntity.created(
                     ServletUriComponentsBuilder.fromCurrentRequestUri()
                             .path("/")
-                            .path(purchaseOrder.publicId.toString())
+                            .path(purchaseOrder.externalId.toString())
                             .build()
                             .toUri())
                     .body(PlaceOrderResponse(purchaseOrder))

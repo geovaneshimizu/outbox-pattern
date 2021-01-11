@@ -13,4 +13,8 @@ class JsonbMapper(private val objectMapper: ObjectMapper) {
     fun <T> fromJsonString(json: String, clazz: Class<T>): T {
         return this.objectMapper.readValue(json, clazz)
     }
+
+    fun <T> fromAny(obj: Any, clazz: Class<T>): T {
+        return fromJsonString(asJsonString(obj), clazz)
+    }
 }

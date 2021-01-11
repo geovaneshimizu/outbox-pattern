@@ -7,7 +7,7 @@ data class PlaceOrderRequest(val userEmail: String,
                              val sectorId: Long,
                              val seatId: Long) {
 
-    fun asCommand(): PlaceOrderValues {
+    fun toPlaceOrderValues(): PlaceOrderValues {
         return PlaceOrderValues(
                 userEmail = this.userEmail,
                 eventId = this.eventId,

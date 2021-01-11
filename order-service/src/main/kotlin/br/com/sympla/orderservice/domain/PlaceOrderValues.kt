@@ -5,8 +5,8 @@ data class PlaceOrderValues(val userEmail: String,
                             val sectorId: Long,
                             val seatId: Long) {
 
-    fun events(): List<(PurchaseOrder) -> PurchaseOrderEvent> {
-        val createdEvent: (PurchaseOrder) -> PurchaseOrderEvent = { PurchaseOrderEvent.Created(it) }
+    fun associatedEvents(): List<(PurchaseOrder) -> PurchaseOrderEvent> {
+        val createdEvent: (PurchaseOrder) -> PurchaseOrderEvent = { PurchaseOrderCreated(it) }
 
         return listOf(createdEvent)
     }
