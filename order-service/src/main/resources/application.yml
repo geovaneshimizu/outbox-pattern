@@ -7,3 +7,7 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+order-service:
+  infra:
+    delete-and-publish-outbox-message-batch-size: 5
