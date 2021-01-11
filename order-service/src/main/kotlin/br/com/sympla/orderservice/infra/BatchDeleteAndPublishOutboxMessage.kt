@@ -49,12 +49,14 @@ class BatchDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
 
                     logger.info { "Deleted ${outboxMessages.size} outbox messages" }
 
-                    outboxMessages.forEach {
-                        val event = extractEvent(it)
-                        logger.info { "Extracted $event" }
-
-                        eventConsumer(event)
-                    }
+                    outboxMessages
+                            .map {
+                                it.emitEvent { any, clazz -> jsonbMapper.fromAny(any, clazz) }
+                                        .also { logger.info { "Emitted $it" } }
+                            }
+                            .forEach {
+                                eventConsumer(it)
+                            }
                 } catch (ex: Exception) {
                     logger.error { "$ex; Rolling back deleted messages" }
                     status.setRollbackOnly()
@@ -76,9 +78,5 @@ class BatchDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
             logger.info { "No outbox message retrieved due: $e" }
             emptyList()
         }
-    }
-
-    private fun extractEvent(outboxMessage: OutboxMessage): Any {
-        return this.jsonbMapper.fromAny(outboxMessage.payload, Class.forName(outboxMessage.event))
     }
 }

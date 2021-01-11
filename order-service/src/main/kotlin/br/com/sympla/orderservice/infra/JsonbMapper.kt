@@ -15,6 +15,6 @@ class JsonbMapper(private val objectMapper: ObjectMapper) {
     }
 
     fun <T> fromAny(obj: Any, clazz: Class<T>): T {
-        return fromJsonString(asJsonString(obj), clazz)
+        return this.objectMapper.convertValue(obj, clazz)
     }
 }

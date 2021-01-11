@@ -4,7 +4,7 @@ import br.com.sympla.orderservice.domain.PurchaseOrder
 import java.time.Instant
 import java.util.*
 
-data class PlaceOrderResponse(val _id: UUID,
+data class PlaceOrderResponse(val id: UUID,
                               val createdAt: Instant,
                               val userEmail: String,
                               val eventId: Long,

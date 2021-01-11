@@ -3,7 +3,7 @@ package br.com.sympla.orderservice.domain
 import java.time.Instant
 import java.util.*
 
-data class PurchaseOrder(private val id: Long,
+data class PurchaseOrder(val id: Long,
                          val externalId: UUID,
                          val createdAt: Instant,
                          val userEmail: String,

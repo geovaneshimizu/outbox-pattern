@@ -47,8 +47,9 @@ class FifoDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
 
                     logger.info { "Deleted $headOutboxMessage" }
 
-                    val event = extractEvent(headOutboxMessage)
-                    logger.info { "Extracted $event" }
+                    val event =
+                            headOutboxMessage.emitEvent { any, clazz -> jsonbMapper.fromAny(any, clazz) }
+                                    .also { logger.info { "Emitted $it" } }
 
                     eventConsumer(event)
                 } catch (ex: Exception) {
@@ -72,9 +73,5 @@ class FifoDeleteAndPublishOutboxMessage(private val jdbcTemplate: JdbcTemplate,
             logger.info { "No outbox message retrieved due: $e" }
             null
         }
-    }
-
-    private fun extractEvent(outboxMessage: OutboxMessage): Any {
-        return this.jsonbMapper.fromAny(outboxMessage.payload, Class.forName(outboxMessage.event))
     }
 }
