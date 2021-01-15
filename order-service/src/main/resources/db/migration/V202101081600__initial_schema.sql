@@ -1,4 +1,4 @@
-CREATE EXTENSION IF NOT EXISTS"uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS order_service.purchase_order (
   id          BIGSERIAL NOT NULL,

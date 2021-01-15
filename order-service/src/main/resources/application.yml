@@ -3,13 +3,28 @@ spring:
     name: order-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres?user=postgres&password=postgres&currentSchema=order_service
+    url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres&currentSchema=order_service
 
   jackson:
     property-naming-strategy: SNAKE_CASE
 
+cloud:
+  aws:
+    region.static: us-east-1
+    stack.auto: false
+
+logging:
+  level:
+    com.amazonaws.util.EC2MetadataUtils: error
+
 order-service:
   infra:
+    aws:
+      endpoint: http://localhost:4566
+      region: ${cloud.aws.region.static}
+      topic:
+        subscription-created: subscription-created
+
     delete-and-publish-outbox-message:
       batch-size: 5
 

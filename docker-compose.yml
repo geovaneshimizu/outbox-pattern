@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  localstack:
+    image: localstack/localstack:0.12.5
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "${PWD}/localstack:/docker-entrypoint-initaws.d"

@@ -15,6 +15,7 @@ class SpringEventPurchaseOrderListener : PurchaseOrderListener {
 
     @EventListener
     override fun onCreated(event: PurchaseOrderCreated) {
-        logger.info { "Consumed $event event" }
+        logger.info { "Just logging $event" }
+        // TODO create a metric for this event
     }
 }
