@@ -1,4 +1,4 @@
-package br.com.sympla.orderservice.infra.messaging
+package dev.geovaneshimizu.subscriptionservice.infra.messaging
 
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.AWSCredentialsProvider
@@ -8,11 +8,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties("order-service.infra.aws")
+@ConfigurationProperties("subscription-service.infra.aws")
 data class AwsProperties(val credentials: Credentials,
                          val endpoint: String,
-                         val region: String,
-                         val sns: Sns) {
+                         val region: String) {
 
     fun endpointConfiguration(): AwsClientBuilder.EndpointConfiguration {
         return AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region)
@@ -29,6 +28,4 @@ data class AwsProperties(val credentials: Credentials,
             // Nothing to do
         }
     }
-
-    data class Sns(val subscriptionCreatedTopic: String)
 }

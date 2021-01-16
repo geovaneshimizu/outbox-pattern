@@ -8,6 +8,8 @@ services:
     environment:
       - SERVICES=sns,sqs
       - DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=OBPAWSAKI
+      - AWS_SECRET_ACCESS_KEY=OBPAWSSAK
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"

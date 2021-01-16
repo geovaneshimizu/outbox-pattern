@@ -1,1 +1,38 @@
+spring:
+  application:
+    name: subscription-service
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres&currentSchema=subscription_service
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID:OBPAWSAKI}
+      secretKey: ${AWS_SECRET_ACCESS_KEY:OBPAWSSAK}
+      instanceProfile: false
+      useDefaultAwsCredentialsChain: false
+    region:
+      auto: false
+      static: us-east-1
+    stack.auto: false
+
+logging:
+  level:
+    com.amazonaws.util.EC2MetadataUtils: error
+
+subscription-service:
+  infra:
+    aws:
+      credentials:
+        accessKey: ${cloud.aws.credentials.accessKey}
+        secretKey: ${cloud.aws.credentials.secretKey}
+      endpoint: http://localhost:4566
+      region: ${cloud.aws.region.static}
+      sqs:
+        new-subscriptions-queue: new-subscriptions
+
+server.port: 8081

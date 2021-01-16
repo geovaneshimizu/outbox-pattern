@@ -1,7 +1,5 @@
 package br.com.sympla.orderservice.infra.messaging
 
-import com.amazonaws.auth.AWSCredentialsProvider
-import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.sns.AmazonSNSAsync
 import com.amazonaws.services.sns.AmazonSNSAsyncClientBuilder
 import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate
@@ -16,10 +14,9 @@ class AwsConfig {
         NotificationMessagingTemplate(amazonSns)
 
     @Bean
-    fun amazonSns(awsCredentialsProvider: AWSCredentialsProvider,
-                  awsProperties: AwsProperties): AmazonSNSAsync =
+    fun amazonSns(awsProperties: AwsProperties): AmazonSNSAsync =
         AmazonSNSAsyncClientBuilder.standard()
-            .withCredentials(awsCredentialsProvider)
-            .withEndpointConfiguration(EndpointConfiguration(awsProperties.endpoint, awsProperties.region))
+            .withCredentials(awsProperties.credentials)
+            .withEndpointConfiguration(awsProperties.endpointConfiguration())
             .build()
 }

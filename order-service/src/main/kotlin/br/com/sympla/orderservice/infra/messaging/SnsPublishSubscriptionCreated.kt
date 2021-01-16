@@ -15,7 +15,7 @@ class SnsPublishSubscriptionCreated(private val notification: NotificationMessag
         private val logger = KotlinLogging.logger { }
     }
 
-    private val subscriptionCreatedTopic = awsProperties.topic.subscriptionCreated
+    private val subscriptionCreatedTopic = awsProperties.sns.subscriptionCreatedTopic
 
     override fun publish(event: SubscriptionCreated) {
         logger.info { "Publishing $event to ${this.subscriptionCreatedTopic} topic" }

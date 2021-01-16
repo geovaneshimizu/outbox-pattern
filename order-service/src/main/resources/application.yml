@@ -10,7 +10,14 @@ spring:
 
 cloud:
   aws:
-    region.static: us-east-1
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID:OBPAWSAKI}
+      secretKey: ${AWS_SECRET_ACCESS_KEY:OBPAWSSAK}
+      instanceProfile: false
+      useDefaultAwsCredentialsChain: false
+    region:
+      auto: false
+      static: us-east-1
     stack.auto: false
 
 logging:
@@ -20,10 +27,13 @@ logging:
 order-service:
   infra:
     aws:
+      credentials:
+        accessKey: ${cloud.aws.credentials.accessKey}
+        secretKey: ${cloud.aws.credentials.secretKey}
       endpoint: http://localhost:4566
       region: ${cloud.aws.region.static}
-      topic:
-        subscription-created: subscription-created
+      sns:
+        subscription-created-topic: subscription-created
 
     delete-and-publish-outbox-message:
       batch-size: 5
