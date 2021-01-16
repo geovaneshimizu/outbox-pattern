@@ -16,7 +16,7 @@ class SqsSubscriptionCreatedListener {
     }
 
     @SqsListener(value = ["\${$newSubscriptionsQueue}"])
-    fun listen(message: Message<*>) {
+    fun listen(message: Message<String>) {
         logger.info { "Got new $message" }
     }
 }
