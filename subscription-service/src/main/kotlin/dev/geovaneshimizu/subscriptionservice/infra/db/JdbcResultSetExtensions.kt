@@ -1,24 +1,17 @@
-package br.com.sympla.orderservice.infra.db
+package dev.geovaneshimizu.subscriptionservice.infra.db
 
 import java.sql.ResultSet
 import java.time.Instant
-import java.util.Calendar
-import java.util.TimeZone
-import java.util.UUID
+import java.util.*
 
 fun ResultSet.getUUID(columnLabel: String): UUID {
     return this.getString(columnLabel)
-        .let { UUID.fromString(it) }
+            .let { UUID.fromString(it) }
 }
 
 fun ResultSet.getInstant(columnLabel: String): Instant {
     return this.getTimestamp(columnLabel, UtcTimeZone.asCalendar)
-        .toInstant()
-}
-
-inline fun <reified T> ResultSet.getJsonb(columnLabel: String, jsonbMapper: JsonbMapper): T {
-    return this.getString(columnLabel)
-        .let { jsonbMapper.fromJsonString(it, T::class.java) }
+            .toInstant()
 }
 
 object UtcTimeZone {
