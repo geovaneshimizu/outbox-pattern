@@ -3,8 +3,11 @@ version: '3.5'
 services:
   localstack:
     image: localstack/localstack:0.12.5
+    restart: always
+    networks:
+      - outbox-net
     ports:
-      - "4566:4566"
+      - 4566:4566
     environment:
       - SERVICES=sns,sqs
       - DEFAULT_REGION=us-east-1
@@ -15,3 +18,17 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "${PWD}/localstack:/docker-entrypoint-initaws.d"
+
+  postgres:
+    image: postgres:12.5-alpine
+    restart: always
+    networks:
+      - outbox-net
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+networks:
+  outbox-net:
+    driver: bridge

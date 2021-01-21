@@ -31,7 +31,7 @@ subscription-service:
       credentials:
         accessKey: ${cloud.aws.credentials.accessKey}
         secretKey: ${cloud.aws.credentials.secretKey}
-      endpoint: http://localhost:4566
+      endpoint: http://${AWS_HOST:localhost}:4566
       region: ${cloud.aws.region.static}
       sqs:
         new-subscriptions-queue: new-subscriptions
