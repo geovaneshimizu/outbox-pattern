@@ -1,6 +1,6 @@
 package dev.geovaneshimizu.subscription.domain.subscription
 
-interface Subscriptions {
+interface SubscriptionRepository {
 
     fun addSubscription(values: AddSubscriptionValues): Subscription
 }

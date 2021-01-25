@@ -2,14 +2,14 @@ package dev.geovaneshimizu.subscription.infra.messaging
 
 import dev.geovaneshimizu.subscription.domain.subscription.IdempotentNewSubscriptionProcessor
 import dev.geovaneshimizu.subscription.domain.subscription.NewSubscriptionListener
-import dev.geovaneshimizu.subscription.domain.subscription.Subscriptions
+import dev.geovaneshimizu.subscription.domain.subscription.SubscriptionRepository
 import mu.KotlinLogging
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener
 import org.springframework.messaging.Message
 import org.springframework.stereotype.Component
 
 @Component
-class SqsNewSubscriptionListener(private val subscriptions: Subscriptions,
+class SqsNewSubscriptionListener(private val subscriptionRepository: SubscriptionRepository,
                                  private val messageProcessor: IdempotentNewSubscriptionProcessor<Message<String>>) :
         NewSubscriptionListener<Message<String>> {
 
@@ -26,7 +26,7 @@ class SqsNewSubscriptionListener(private val subscriptions: Subscriptions,
 
         this.messageProcessor.acceptIfNotExists(message) { newSubscription ->
             logger.info { "Adding $newSubscription" }
-            this.subscriptions.addSubscription(newSubscription.valuesToAdd())
+            this.subscriptionRepository.addSubscription(newSubscription.valuesToAdd())
         }
     }
 }

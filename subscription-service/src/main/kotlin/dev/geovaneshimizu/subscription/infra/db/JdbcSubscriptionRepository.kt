@@ -2,13 +2,13 @@ package dev.geovaneshimizu.subscription.infra.db
 
 import dev.geovaneshimizu.subscription.domain.subscription.AddSubscriptionValues
 import dev.geovaneshimizu.subscription.domain.subscription.Subscription
-import dev.geovaneshimizu.subscription.domain.subscription.Subscriptions
+import dev.geovaneshimizu.subscription.domain.subscription.SubscriptionRepository
 import mu.KotlinLogging
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class JdbcSubscriptions(private val jdbcTemplate: JdbcTemplate) : Subscriptions {
+class JdbcSubscriptionRepository(private val jdbcTemplate: JdbcTemplate) : SubscriptionRepository {
 
     companion object {
         private val logger = KotlinLogging.logger { }
