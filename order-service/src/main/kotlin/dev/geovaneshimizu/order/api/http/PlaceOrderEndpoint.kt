@@ -1,4 +1,4 @@
-package dev.geovaneshimizu.order.api
+package dev.geovaneshimizu.order.api.http
 
 import dev.geovaneshimizu.order.domain.order.PurchaseOrders
 import mu.KotlinLogging
