@@ -1,4 +1,4 @@
-package dev.geovaneshimizu.subscription.infra.db
+package dev.geovaneshimizu.subscription.infra.messaging
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -7,7 +7,7 @@ import org.springframework.integration.metadata.ConcurrentMetadataStore
 import javax.sql.DataSource
 
 @Configuration
-class DbConfig {
+class SpringIntegrationConfig {
 
     @Bean
     fun idempotencyKeyStore(dataSource: DataSource): ConcurrentMetadataStore {
