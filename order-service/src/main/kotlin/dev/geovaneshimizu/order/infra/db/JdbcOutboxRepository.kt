@@ -14,6 +14,7 @@ class JdbcOutboxRepository(private val jdbcTemplate: JdbcTemplate,
     }
 
     override fun insert(values: NewMessageValues): OutboxMessage {
+        logger.info { "Inserting $values" }
         return InsertOutboxMessage(this.jdbcTemplate, this.jsonbMapper, values)()
     }
 }

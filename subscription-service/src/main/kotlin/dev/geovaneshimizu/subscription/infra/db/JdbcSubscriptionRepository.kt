@@ -14,8 +14,8 @@ class JdbcSubscriptionRepository(private val jdbcTemplate: JdbcTemplate) : Subsc
         private val logger = KotlinLogging.logger { }
     }
 
-    override fun addSubscription(values: AddSubscriptionValues): Subscription {
+    override fun insert(values: AddSubscriptionValues): Subscription {
+        logger.info { "Adding $values" }
         return InsertSubscription(this.jdbcTemplate, values)()
-                .also { logger.info { "Inserted $it" } }
     }
 }

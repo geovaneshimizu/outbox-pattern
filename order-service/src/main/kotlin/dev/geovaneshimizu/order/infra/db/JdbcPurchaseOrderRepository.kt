@@ -18,6 +18,7 @@ class JdbcPurchaseOrderRepository(private val jdbcTemplate: JdbcTemplate,
     private val transactionTemplate = TransactionTemplate(transactionManager)
 
     override fun insert(values: PlaceOrderValues): PurchaseOrder {
+        logger.info { "Inserting $values" }
         return InsertPurchaseOrder(this.jdbcTemplate, values)()
     }
 

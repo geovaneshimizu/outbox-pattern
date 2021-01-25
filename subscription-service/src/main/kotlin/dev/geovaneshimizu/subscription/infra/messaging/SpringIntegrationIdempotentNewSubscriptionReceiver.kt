@@ -2,9 +2,8 @@ package dev.geovaneshimizu.subscription.infra.messaging
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import dev.geovaneshimizu.subscription.domain.subscription.IdempotencyNewSubscriptionKey
-import dev.geovaneshimizu.subscription.domain.subscription.IdempotentNewSubscriptionProcessor
+import dev.geovaneshimizu.subscription.domain.subscription.IdempotentNewSubscriptionReceiver
 import dev.geovaneshimizu.subscription.domain.subscription.NewSubscription
-import dev.geovaneshimizu.subscription.infra.spring.getPayloadMessageAs
 import mu.KotlinLogging
 import org.springframework.integration.handler.MessageProcessor
 import org.springframework.integration.metadata.ConcurrentMetadataStore
@@ -13,25 +12,25 @@ import org.springframework.messaging.Message
 import org.springframework.stereotype.Component
 
 @Component
-class SpringIntegrationIdempotentNewSubscriptionProcessor(private val objectMapper: ObjectMapper,
-                                                          idempotencyKeyStore: ConcurrentMetadataStore) :
-        IdempotentNewSubscriptionProcessor<Message<String>>, MessageProcessor<String> {
+class SpringIntegrationIdempotentNewSubscriptionReceiver(private val objectMapper: ObjectMapper,
+                                                         idempotencyKeyStore: ConcurrentMetadataStore) :
+        IdempotentNewSubscriptionReceiver<Message<String>>, MessageProcessor<String> {
 
     companion object {
         val logger = KotlinLogging.logger { }
     }
 
-    private val idempotentReceiver by lazy { MetadataStoreSelector(this, idempotencyKeyStore) }
+    private val idempotentReceiverImpl by lazy { MetadataStoreSelector(this, idempotencyKeyStore) }
 
-    override fun acceptIfNotExists(message: Message<String>, consumer: (NewSubscription) -> Unit): NewSubscription {
-        val newSubscription = message.getPayloadMessageAs<NewSubscription>(this.objectMapper)
-        if (this.idempotentReceiver.accept(message)) {
+    override fun acceptNewSubscription(message: Message<String>, consumer: (NewSubscription) -> Unit): NewSubscription? {
+        return if (this.idempotentReceiverImpl.accept(message)) {
+            val newSubscription = message.getPayloadMessageAs<NewSubscription>(this.objectMapper)
+            logger.info { "Accepted $newSubscription" }
             consumer.invoke(newSubscription)
+            newSubscription
         } else {
-            logger.info { "Duplicated $newSubscription; Discarding..." }
+            null
         }
-
-        return newSubscription
     }
 
     override fun processMessage(message: Message<*>?): String? {

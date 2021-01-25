@@ -1,4 +1,4 @@
-package dev.geovaneshimizu.subscription.infra.spring
+package dev.geovaneshimizu.subscription.infra.messaging
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.messaging.Message
