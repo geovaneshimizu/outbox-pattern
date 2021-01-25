@@ -1,5 +1,6 @@
 package dev.geovaneshimizu.subscription.infra.messaging
 
+import dev.geovaneshimizu.subscription.domain.subscription.IdempotentNewSubscriptionProcessor
 import dev.geovaneshimizu.subscription.domain.subscription.NewSubscriptionListener
 import dev.geovaneshimizu.subscription.domain.subscription.Subscriptions
 import mu.KotlinLogging
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class SqsNewSubscriptionListener(private val subscriptions: Subscriptions,
-                                 private val idempotentReceiver: IdempotentNewSubscriptionReceiver) :
+                                 private val messageProcessor: IdempotentNewSubscriptionProcessor<Message<String>>) :
         NewSubscriptionListener<Message<String>> {
 
     companion object {
@@ -23,7 +24,7 @@ class SqsNewSubscriptionListener(private val subscriptions: Subscriptions,
     override fun listen(message: Message<String>) {
         logger.info { "Received $message" }
 
-        this.idempotentReceiver.acceptIfNotExists(message) { newSubscription ->
+        this.messageProcessor.acceptIfNotExists(message) { newSubscription ->
             logger.info { "Adding $newSubscription" }
             this.subscriptions.addSubscription(newSubscription.valuesToAdd())
         }
