@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Configuration
 class AwsConfig {
 
     @Bean
-    fun amazonSqs(awsProperties: AwsProperties): AmazonSQSAsync =
-            AmazonSQSAsyncClientBuilder.standard()
-                    .withCredentials(awsProperties.credentials)
-                    .withEndpointConfiguration(awsProperties.endpointConfiguration())
-                    .build()
+    fun amazonSqs(awsProperties: AwsProperties): AmazonSQSAsync {
+        return AmazonSQSAsyncClientBuilder.standard()
+                .withCredentials(awsProperties.credentials)
+                .withEndpointConfiguration(awsProperties.endpointConfiguration())
+                .build()
+    }
 }

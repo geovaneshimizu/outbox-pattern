@@ -19,9 +19,11 @@ repositories {
 extra["springCloudVersion"] = "Hoxton.SR9"
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.cloud:spring-cloud-starter-aws-messaging")
+    implementation("org.springframework.integration:spring-integration-jdbc")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.4")
