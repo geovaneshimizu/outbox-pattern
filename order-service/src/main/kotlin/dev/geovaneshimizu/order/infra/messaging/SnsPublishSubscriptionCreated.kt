@@ -4,9 +4,7 @@ import dev.geovaneshimizu.order.domain.order.PublishSubscriptionCreated
 import dev.geovaneshimizu.order.domain.order.SubscriptionCreated
 import mu.KotlinLogging
 import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate
-import org.springframework.stereotype.Component
 
-@Component
 class SnsPublishSubscriptionCreated(private val notification: NotificationMessagingTemplate,
                                     awsProperties: AwsProperties) : PublishSubscriptionCreated {
 

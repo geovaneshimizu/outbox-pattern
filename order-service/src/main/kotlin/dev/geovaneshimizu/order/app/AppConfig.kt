@@ -1,12 +1,16 @@
 package dev.geovaneshimizu.order.app
 
-import dev.geovaneshimizu.order.domain.order.PurchaseOrderRepository
-import dev.geovaneshimizu.order.domain.order.PurchaseOrders
+import dev.geovaneshimizu.order.domain.order.*
 import dev.geovaneshimizu.order.domain.outbox.*
 import dev.geovaneshimizu.order.infra.db.JdbcOutboxRepository
 import dev.geovaneshimizu.order.infra.db.JdbcPurchaseOrderRepository
 import dev.geovaneshimizu.order.infra.db.JsonbMapper
+import dev.geovaneshimizu.order.infra.messaging.AwsProperties
+import dev.geovaneshimizu.order.infra.messaging.SnsPublishSubscriptionCreated
+import dev.geovaneshimizu.order.infra.messaging.SpringEventPurchaseOrderListener
+import dev.geovaneshimizu.order.infra.messaging.SpringEventSubscriptionListener
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -59,5 +63,21 @@ class AppConfig {
                 payloadToEvent = payloadToEvent,
                 eventPublisher = eventPublisher::publishEvent,
                 messagesToDelete = messagesToDelete)
+    }
+
+    @Bean
+    fun purchaseOrderListener(): PurchaseOrderListener {
+        return SpringEventPurchaseOrderListener(LoggingPurchaseOrderListener())
+    }
+
+    @Bean
+    fun subscriptionListener(publishSubscriptionCreated: PublishSubscriptionCreated): SubscriptionListener {
+        return SpringEventSubscriptionListener(PublishingSubscriptionListener(publishSubscriptionCreated))
+    }
+
+    @Bean
+    fun publishSubscriptionCreated(notification: NotificationMessagingTemplate,
+                                   awsProperties: AwsProperties): PublishSubscriptionCreated {
+        return SnsPublishSubscriptionCreated(notification, awsProperties)
     }
 }
