@@ -1,4 +1,4 @@
-package dev.geovaneshimizu.subscription.api.messaging
+package dev.geovaneshimizu.subscription.app.api.messaging
 
 import dev.geovaneshimizu.subscription.domain.subscription.NewSubscriptionListener
 import mu.KotlinLogging

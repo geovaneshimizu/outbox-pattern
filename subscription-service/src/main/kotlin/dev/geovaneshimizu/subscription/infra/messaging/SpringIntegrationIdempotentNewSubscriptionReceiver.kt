@@ -9,9 +9,7 @@ import org.springframework.integration.handler.MessageProcessor
 import org.springframework.integration.metadata.ConcurrentMetadataStore
 import org.springframework.integration.selector.MetadataStoreSelector
 import org.springframework.messaging.Message
-import org.springframework.stereotype.Component
 
-@Component
 class SpringIntegrationIdempotentNewSubscriptionReceiver(private val objectMapper: ObjectMapper,
                                                          idempotencyKeyStore: ConcurrentMetadataStore) :
         IdempotentNewSubscriptionReceiver<Message<String>>, MessageProcessor<String> {

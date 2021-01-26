@@ -6,8 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
 
 
-class InsertSubscription(private val jdbcTemplate: JdbcTemplate,
-                         private val addSubscriptionValues: AddSubscriptionValues) : () -> Subscription {
+class InsertSubscription(private val jdbcTemplate: JdbcTemplate) : (AddSubscriptionValues) -> Subscription {
 
     companion object {
         private val insertScript: String = """
@@ -17,14 +16,14 @@ class InsertSubscription(private val jdbcTemplate: JdbcTemplate,
         """.trimIndent()
     }
 
-    override fun invoke(): Subscription {
+    override fun invoke(addSubscriptionValues: AddSubscriptionValues): Subscription {
         return this.jdbcTemplate.queryForObject(
                 insertScript,
-                this.addSubscriptionValues.purchaseOrderId,
-                this.addSubscriptionValues.expiresAt,
-                this.addSubscriptionValues.userEmail,
-                this.addSubscriptionValues.sectorId,
-                this.addSubscriptionValues.seatId)
+                addSubscriptionValues.purchaseOrderId,
+                addSubscriptionValues.expiresAt,
+                addSubscriptionValues.userEmail,
+                addSubscriptionValues.sectorId,
+                addSubscriptionValues.seatId)
         { resultSet, _ ->
             Subscription(
                     id = resultSet.getLong("id"),

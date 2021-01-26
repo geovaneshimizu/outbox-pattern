@@ -5,9 +5,7 @@ import dev.geovaneshimizu.subscription.domain.subscription.Subscription
 import dev.geovaneshimizu.subscription.domain.subscription.SubscriptionRepository
 import mu.KotlinLogging
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.stereotype.Component
 
-@Component
 class JdbcSubscriptionRepository(private val jdbcTemplate: JdbcTemplate) : SubscriptionRepository {
 
     companion object {
@@ -16,6 +14,6 @@ class JdbcSubscriptionRepository(private val jdbcTemplate: JdbcTemplate) : Subsc
 
     override fun insert(values: AddSubscriptionValues): Subscription {
         logger.info { "Adding $values" }
-        return InsertSubscription(this.jdbcTemplate, values)()
+        return InsertSubscription(this.jdbcTemplate)(values)
     }
 }
