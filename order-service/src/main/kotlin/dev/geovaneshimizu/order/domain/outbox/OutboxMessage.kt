@@ -7,7 +7,7 @@ data class OutboxMessage(val id: Long,
                          val event: String,
                          val payload: Map<String, Any>) {
 
-    fun <T> emitEvent(payloadToEvent: (Any, Class<*>) -> T): T {
+    fun <T> emitEvent(payloadToEvent: OutboxMessagePayloadToEvent<T>): T {
         return payloadToEvent(this.payload, Class.forName(this.event))
     }
 }

@@ -26,6 +26,13 @@ logging:
     com.amazonaws.util.EC2MetadataUtils: error
 
 order-service:
+  app:
+    job:
+      outbox-polling:
+        fixed-rate-in-milli: 5000
+        initial-delay-in-milli: 5000
+        messages-to-delete: 5
+
   infra:
     aws:
       credentials:
@@ -35,10 +42,3 @@ order-service:
       region: ${cloud.aws.region.static}
       sns:
         subscription-created-topic: subscription-created
-
-    delete-and-publish-outbox-message:
-      batch-size: 5
-
-    polling-outbox-processor:
-      fixed-rate-in-milli: 5000
-      initial-delay-in-milli: 5000

@@ -19,10 +19,10 @@ class JdbcPurchaseOrderRepository(private val jdbcTemplate: JdbcTemplate,
 
     override fun insert(values: PlaceOrderValues): PurchaseOrder {
         logger.info { "Inserting $values" }
-        return InsertPurchaseOrder(this.jdbcTemplate, values)()
+        return InsertPurchaseOrder(this.jdbcTemplate)(values)
     }
 
-    override fun <T> executeInTransaction(block: () -> T?): T? {
+    override fun <T> executeInTransactionWithResult(block: () -> T?): T? {
         return this.transactionTemplate.execute { transactionStatus ->
             try {
                 block()
@@ -30,6 +30,17 @@ class JdbcPurchaseOrderRepository(private val jdbcTemplate: JdbcTemplate,
                 logger.error(e) { "Purchase order transaction error: ${e.message}" }
                 transactionStatus.setRollbackOnly()
                 null
+            }
+        }
+    }
+
+    override fun executeInTransactionWithoutResult(block: () -> Unit) {
+        return this.transactionTemplate.executeWithoutResult { transactionStatus ->
+            try {
+                block()
+            } catch (e: Exception) {
+                logger.error(e) { "Purchase order transaction error: ${e.message}" }
+                transactionStatus.setRollbackOnly()
             }
         }
     }

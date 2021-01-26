@@ -5,8 +5,7 @@ import dev.geovaneshimizu.order.domain.order.PurchaseOrder
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
 
-class InsertPurchaseOrder(private val jdbcTemplate: JdbcTemplate,
-                          private val placeOrderValues: PlaceOrderValues) : () -> PurchaseOrder {
+class InsertPurchaseOrder(private val jdbcTemplate: JdbcTemplate) : (PlaceOrderValues) -> PurchaseOrder {
 
     companion object {
         private val insertScript: String = """
@@ -16,13 +15,13 @@ class InsertPurchaseOrder(private val jdbcTemplate: JdbcTemplate,
         """.trimIndent()
     }
 
-    override fun invoke(): PurchaseOrder {
+    override fun invoke(placeOrderValues: PlaceOrderValues): PurchaseOrder {
         return this.jdbcTemplate.queryForObject(
                 insertScript,
-                this.placeOrderValues.userEmail,
-                this.placeOrderValues.eventId,
-                this.placeOrderValues.sectorId,
-                this.placeOrderValues.seatId)
+                placeOrderValues.userEmail,
+                placeOrderValues.eventId,
+                placeOrderValues.sectorId,
+                placeOrderValues.seatId)
         { resultSet, _ ->
             PurchaseOrder(
                     id = resultSet.getLong("id"),

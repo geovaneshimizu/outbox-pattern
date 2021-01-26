@@ -11,7 +11,7 @@ class PurchaseOrders(private val purchaseOrderRepository: PurchaseOrderRepositor
     }
 
     fun placeOrder(values: PlaceOrderValues): PurchaseOrder? {
-        return this.purchaseOrderRepository.executeInTransaction {
+        return this.purchaseOrderRepository.executeInTransactionWithResult {
             val purchaseOrder =
                     purchaseOrderRepository.insert(values)
                             .also { logger.info { "Inserted $it" } }

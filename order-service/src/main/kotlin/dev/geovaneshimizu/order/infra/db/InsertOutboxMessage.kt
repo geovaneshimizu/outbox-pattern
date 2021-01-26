@@ -6,8 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
 
 class InsertOutboxMessage(private val jdbcTemplate: JdbcTemplate,
-                          private val jsonbMapper: JsonbMapper,
-                          private val newMessageValues: NewMessageValues) : () -> OutboxMessage {
+                          private val jsonbMapper: JsonbMapper) : (NewMessageValues) -> OutboxMessage {
 
     companion object {
         private val insertScript: String = """
@@ -17,11 +16,11 @@ class InsertOutboxMessage(private val jdbcTemplate: JdbcTemplate,
         """.trimIndent()
     }
 
-    override fun invoke(): OutboxMessage {
+    override fun invoke(newMessageValues: NewMessageValues): OutboxMessage {
         return this.jdbcTemplate.queryForObject(
                 insertScript,
-                this.newMessageValues.event,
-                this.jsonbMapper.asJsonString(this.newMessageValues.payload))
+                newMessageValues.event,
+                this.jsonbMapper.asJsonString(newMessageValues.payload))
         { resultSet, _ ->
             OutboxMessage(
                     id = resultSet.getLong("id"),
